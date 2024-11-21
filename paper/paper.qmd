@@ -1,0 +1,39 @@
+---
+title: "Exploring the Price of Egg Dozens"
+author: Liam Wall
+thanks: "Code and data are available at: https://github.com/Lwall02/Project-Hammer"
+date: 21 November 2024
+date-format: long
+format: pdf
+number-sections: true
+abstract: "Understanding the pricing behavior of large and small food vendors is essential, particularly for staple goods like eggs. By using SQL and R to clean, manipulate, and visualize data on price changes for a dozen eggs over a six-month period, we identified vendor-specific trends. Our analysis reveals that larger vendors tend to maintain stable prices, while smaller vendors experience more frequent price changes to remain competitive. Additionally, smaller discount vendors are often priced higher than their competitors. These findings shed light on the different strategies vendors employ based on their market position and challenge common perceptions about discount vendors."
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(ggplot2)
+
+price_change_data <- read_csv(here::here("data/egg_price_change_data.csv"))
+```
+
+# Introduction
+The grocery retail industry in Canada is dominated by a few key players, each employing distinct pricing strategies to maintain market share in a competitive environment. Among these, Loblaws has consistently held the top spot, commanding an estimated 29% share of the grocery retail market in 2022. Walmart, a multinational retail giant, followed with roughly 8% of the market. These two vendors, alongside competitors like Metro Inc. and Sobeys (owner of the online grocery platform Voila), shape the pricing landscape for essential goods such as eggs [CITATION].
+
+Metro Inc., one of Loblaws' primary competitors, has made significant financial strides in recent years. In 2022, Metro achieved a record net income of 922 million Canadian dollars, with the majority of its stores located in Québec. Meanwhile, Walmart and Loblaws remain the most popular grocery retailers in Canada, with Walmart being a regular destination for nearly half of Canadian shoppers in 2019 [CITATION]. These retailers' pricing strategies are critical in influencing consumer behavior and defining market trends. 
+
+This paper examines the pricing behavior of these key vendors with a specific focus on the price of a dozen eggs. Using a dataset covering price changes over a six-month period, this study explores vendor-specific trends and pricing strategies. The findings reveal how large vendors, such as Loblaws and Walmart, exhibit price stability, while smaller or more specialized vendors, including discount retailers like No Frills, experience greater variability in pricing. These insights provide a deeper understanding of the competitive dynamics within the Canadian grocery industry and challenge common assumptions about discount pricing.
+
+# Data
+The dataset used in this paper hails from Project Hammer. Project Hammer is a personal project by Jacob Filipp in an effort to drive competition while reducing collusion in the Canadian grocery market. The basis for this project is compiling a historical database of the prices of any and all Canadian goods that are made available by Canada's largest food vendors. Filipp makes this database available to the public in CSV, SQL, and Excel in easy to use formats. Furthermore, Filipp encourages the use of this database for academic analysis and even legal action. 
+
+The information in Project Hammer's historical grocery price database includes 
+
+# Measurement
+# Results
+# Discussion
+# References
