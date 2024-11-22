@@ -48,6 +48,7 @@ price_change_data |>
   mutate(price_change = round(price_change, 2)) |>
   ggplot(aes(x = first_date, y = price_change, color = vendor)) +
   geom_line() +
+  facet_wrap(~ vendor) +
   theme_minimal() +
   labs(title = "Price Change Over Time by Vendor", 
        x = "Date", 
@@ -61,9 +62,10 @@ price_change_data |>
     median_change = median(price_change, na.rm = TRUE),
     min_change = min(price_change, na.rm = TRUE),
     max_change = max(price_change, na.rm = TRUE),
-    occurences = n()
+    occurences = n(),
+    avg_price = mean(last_price)
   ) |>
-  arrange(mean_change)
+  arrange(avg_price)
 
 # Correlation Between Price Change and Other Variables
 cor_matrix <- cor(price_change_data[, sapply(price_change_data, is.numeric)], use = "complete.obs")
