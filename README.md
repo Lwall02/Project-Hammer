@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repo provides the reader with an insight on ways to track grocery prices across multiple vendors. By analysing the chnag ein price of a dozen of eggs we gain insight to how different vendors behave when pricing staple goods. This paper shows that large corporations tend to have more stable prices than smaller corporations. Also we find that what is typically considered discount vendors actually price their egg dozens higher than others supporting the idea that staple goods may not be capable of being discounted as easily. 
+This repo provides the reader with an insight on ways to track grocery prices across multiple vendors. By analysing the chnage in price of a dozen of eggs we gain insight to how different vendors behave when pricing staple goods. This paper shows that large corporations tend to have more stable prices than smaller corporations. Also we find that what is typically considered discount vendors actually price their egg dozens higher than others supporting the idea that staple goods may not be capable of being discounted as easily. 
 
 
 ## File Structure
