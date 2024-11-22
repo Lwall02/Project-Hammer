@@ -54,7 +54,7 @@ price_change_data |>
        x = "Date", 
        y = "Price Change")
 
-#  Table Summarizing Price Changes
+# Table Summarizing Price Changes
 price_change_data |>
   group_by(vendor) |>
   summarize(

@@ -22,14 +22,16 @@ price_change_data <- read_csv(here::here("data/egg_price_change_data.csv"))
 ```
 
 # Introduction
-The grocery retail industry in Canada is dominated by a few key players, each employing distinct pricing strategies to maintain market share in a competitive environment. Among these, Loblaws has consistently held the top spot, commanding an estimated 29% share of the grocery retail market in 2022. Walmart, a multinational retail giant, followed with roughly 8% of the market. These two vendors, alongside competitors like Metro Inc. and Sobeys (owner of the online grocery platform Voila), shape the pricing landscape for essential goods such as eggs [CITATION].
+The grocery retail industry in Canada is dominated by a few key players, each employing distinct pricing strategies to maintain market share in a competitive environment. Among these, Loblaws has consistently held the top spot, commanding an estimated 29% share of the grocery retail market in 2022. Walmart, a multinational retail giant, followed with roughly 8% of the market. These two vendors, alongside competitors like Metro Inc. and Sobeys (owner of the online grocery platform Voila), shape the pricing landscape for essential goods such as eggs [@statista].
 
-Metro Inc., one of Loblaws' primary competitors, has made significant financial strides in recent years. In 2022, Metro achieved a record net income of 922 million Canadian dollars, with the majority of its stores located in Québec. Meanwhile, Walmart and Loblaws remain the most popular grocery retailers in Canada, with Walmart being a regular destination for nearly half of Canadian shoppers in 2019 [CITATION]. These retailers' pricing strategies are critical in influencing consumer behavior and defining market trends. 
+Metro Inc., one of Loblaws' primary competitors, has made significant financial strides in recent years. In 2022, Metro achieved a record net income of 922 million Canadian dollars, with the majority of its stores located in Québec. Meanwhile, Walmart and Loblaws remain the most popular grocery retailers in Canada, with Walmart being a regular destination for nearly half of Canadian shoppers in 2019 [@statista]. These retailers' pricing strategies are critical in influencing consumer behavior and defining market trends. 
 
 This paper examines the pricing behavior of these key vendors with a specific focus on the price of a dozen eggs. Using a dataset covering price changes over a six-month period, this study explores vendor-specific trends and pricing strategies. The findings reveal how large vendors, such as Loblaws and Walmart, exhibit price stability, while smaller or more specialized vendors, including discount retailers like No Frills, experience greater variability in pricing. These insights provide a deeper understanding of the competitive dynamics within the Canadian grocery industry and challenge common assumptions about discount pricing.
 
+This paper was made using the open source programming language @citeR. The dataset used in this study was sourced from [@cite-jacob] and cleaned using SQL for consistency and analysis. SQL’s query capabilities allowed for efficient manipulation of paired price data, which was then visualized in R using the tidyverse package [@tidyverse] and ggplot2 [@ggplot]. 
+
 # Data
-The dataset used in this paper hails from Project Hammer. Project Hammer is a personal project by Jacob Filipp in an effort to drive competition while reducing collusion in the Canadian grocery market. The basis for this project is compiling a historical database of the prices of any and all Canadian goods that are made available by Canada's largest food vendors. Filipp makes this database available to the public in CSV, SQL, and Excel in easy to use formats. Furthermore, Filipp encourages the use of this database for academic analysis and even legal action. [CITATION] 
+The dataset used in this paper hails from Project Hammer. Project Hammer is a personal project by Jacob Filipp in an effort to drive competition while reducing collusion in the Canadian grocery market. The basis for this project is compiling a historical database of the prices of any and all Canadian goods that are made available by Canada's largest food vendors. Filipp makes this database available to the public in CSV, SQL, and Excel in easy to use formats. Furthermore, Filipp encourages the use of this database for academic analysis and even legal action. [@cite-jacob] 
 
 The information in Project Hammer's historical grocery price is from a screen scrape of a website UI. Although the actual website is never referenced, any entry in the dataset is from said website with the price scraped from the pick up in store option for a specific neighborhood in Toronto (also not mentioned). Being that is not using an API or a more relaible method, this comes with many instances of missing information. There are a total of 129,420 different products from eight vendors (Voila, T&T, Loblaws, No Frills, Metro, Galleria, Walmart Canada, and Save-On-Foods). For these products, the webscraping has collected 12,027,666 instances of prices for these goods. Each individual instance is the price of one product at a time recorded down to the nearest minute. 
 
@@ -45,7 +47,7 @@ For each entry in the dataset there is the following information:
 - a note which may or may not provide additonal information like "Out of Stock", minimum purchase specifications, etc. 
 
 ## Data Specific to Egg Dozens
-For the purposes of this paper, we look only at the price of a dozen eggs. In order to do this, all data manipulation was completed using SQL [CITATION FOR SQL]. We found a total of 438 entries relating to egg dozens that contained sufficient information in order to examine a change in price over time. To do this we filtered the data down to entries where "eggs" is mentioned in the product name and "12" is mentioned in the units. Although one may assume this cuts out a lot of information relevant to this paper, it does not. There were zero entries where the word "dozen" appeared in the units column. Furthermore we used "eggs" instead of "egg" because "egg" alows for a multitude of other products that include phrases like "veggies." We needed to specify both "eggs" and "12" because there are many instances of the price of eggs in quantities other than a dozen. For example there is are instances of "eggs" appearing in the product name while "12" does not appear in the units; "duck eggs" and "veggies" both contains "egg" but neither will contain 12. Lastly, we only looked at the oldest and most recent instance for each individual product based on the date listed. 
+For the purposes of this paper, we look only at the price of a dozen eggs. In order to do this, all data manipulation was completed using SQL. We found a total of 438 entries relating to egg dozens that contained sufficient information in order to examine a change in price over time. To do this we filtered the data down to entries where "eggs" is mentioned in the product name and "12" is mentioned in the units. Although one may assume this cuts out a lot of information relevant to this paper, it does not. There were zero entries where the word "dozen" appeared in the units column. Furthermore we used "eggs" instead of "egg" because "egg" alows for a multitude of other products that include phrases like "veggies." We needed to specify both "eggs" and "12" because there are many instances of the price of eggs in quantities other than a dozen. For example there is are instances of "eggs" appearing in the product name while "12" does not appear in the units; "duck eggs" and "veggies" both contains "egg" but neither will contain 12. Lastly, we only looked at the oldest and most recent instance for each individual product based on the date listed. 
 
 Using the above criteria we found 452 entries. By manually searching through the data we found instances where some entries only have price information for a singular date. We also found instances of products that were not egg dozens. For example "duck eggs" with units "312g" which was included based on the search criteria. Also a pack of 30 eggs which had the units "$12.49" which also was included. After this manual double checking of the dataset we found exactly 438 entries of egg dozens where there is two listed prices at dates that are more than a day apart. That is exactly two entries each for 219 instances of egg dozens.
 
@@ -57,5 +59,123 @@ Although previously mentioned, the data is collecting by web scrapping a website
 Another aspect of the measurement in this paper is the price. The web scraping tool takes the current price and units at the time of scrapping. It important to consider products with the same units and their corresponding price because there can be many differences in how the product is listed to the public. For this reason we made sure only to consider dozens of eggs where the price pertains to the whole dozen and not an individual egg. The price is always the exact price you would see if you were physically shopping in the store due to the pick-up-in-store option. Added online fees are not apart of this dataset. 
 
 # Results
+Now to look at some of the findings from this data. First we look at a collection of all the data faceted by each vendor [@fig-facet-vendor]. This graph shows a faceted bar graph showing the frequency of different chnages in price for a dozen eggs.
+```{r}
+#| label: fig-facet-vendor
+#| fig-cap: "This graph shows the change in price for a dozen eggs for each vendor."
+#| warning: false
+#| message: false
+#| echo: false
+
+# Vendor-wise Price Change Distribution (Facet Grid)
+price_change_data |>
+  mutate(price_change = round(price_change, 2)) |>
+  ggplot(aes(x = price_change)) +
+  geom_histogram(bins = 20, fill = "skyblue", color = "black") +
+  facet_wrap(~ vendor) +
+  theme_minimal() +
+  labs(title = "Price Change Distribution by Vendor", 
+       x = "Price Change", 
+       y = "Frequency")
+```
+In this next graph we see the aggregated change in prices over all vendors regardless of vendor [@fig-histogram]. The change in prices are grouped into bars where each bar accounts for plus or minus 10 cents around the value which it lies above. For example the bar above a \$0.00 price chnage accounts for those prices changes contained in the interval -\$0.10 to \$0.10. 
+```{r}
+#| label: fig-histogram
+#| fig-cap: "This graph shows the frequency of all changes in price for the 219 products (dozen eggs)."
+#| warning: false
+#| message: false
+#| echo: false
+
+# Histogram of Price Changes
+price_change_data |>
+  mutate(price_change = round(price_change, 2)) |>
+  ggplot(aes(x = price_change)) +
+  geom_histogram(bins = 20, fill = "skyblue", color = "black") +
+  theme_minimal() +
+  labs(title = "Distribution of Price Changes for Dozen Eggs", 
+       x = "Price Change", 
+       y = "Frequency")
+```
+This next figure shows a more detailed look into the severity of price changes each vendor employs and their frequency [@fig-box-line-1]. We see a box plot showing the interquartile range of on the price changes and the vendor's outliers. We can look at @fig-box-line-2 to get an idea of the time span of the data collected for each of the vendors.
+```{r}
+#| label: fig-box-line
+#| fig-cap: ["This graph shows the distribution of the vendor's chnage in price fro a dozen eggs using a box plot. The box represents the interquartile range with the lines as its extremes. And the dots are the outliers.", "This line graph shows the price chnages in a dozen eggs for each vendor. The line tracks all prices of the vendor's products which is why it is not a continuous line but rather the aggregated look at all the prices of a dozen eggs and how they change."]
+#| warning: false
+#| message: false
+#| echo: false
+#| layout-ncol: 2
+
+# Box Plot of Price Changes by Vendor
+price_change_data |>
+  mutate(price_change = round(price_change, 2)) |>
+  ggplot(aes(x = vendor, y = price_change, fill = vendor)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Price Change Distribution by Vendor", 
+       x = "Vendor", 
+       y = "Price Change") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Line Plot of Price Change Over Time
+price_change_data |>
+  mutate(price_change = round(price_change, 2)) |>
+  ggplot(aes(x = first_date, y = price_change, color = vendor)) +
+  geom_line() +
+  facet_wrap(~ vendor) +
+  theme_minimal() +
+  labs(title = "Price Change Over Time by Vendor", 
+       x = "Date", 
+       y = "Price Change")
+```
+Lastly, let us look at a table, [@fig-stats], showing the typical statistics we are curious in when examining data. This table shows the average change in price per vendor, along with it's minimum and maximum chnage in price as well as the number of products we have information for per vendor.
+```{r}
+#| label: fig-stats
+#| fig-cap: "This table shows the mean, median, minimum, and maximum in changes in price for a dozen eggs for each vendor. It also shows the number of products we are tracking for each vendor and the average price of a dozen eggs at each vendor."
+#| warning: false
+#| message: false
+#| echo: false
+
+# Table Summarizing Price Changes
+price_change_data |>
+  group_by(vendor) |>
+  summarize(
+    "Mean Change" = round(mean(price_change, na.rm = TRUE), 3),
+    "Median" = median(price_change, na.rm = TRUE),
+    "Minimum" = min(price_change, na.rm = TRUE),
+    "Maximum" = max(price_change, na.rm = TRUE),
+    Occurences = n(),
+    "Average Price" = round(mean(last_price), 2)
+  ) |>
+  arrange(Occurences) |>
+  kableExtra::kable()
+```
+
 # Discussion
+What is most obvious from these results is that each vendor is somewhat unique and there is no exact matches despite the fact some vendors are selling the exact same products. It is difficult to make assumptions from such a small time period and in the case where some vendors have sparse data, but nonetheless there are still takeaways.
+
+What is clear is that Loblaws, No Frills, Walmart, and Voila maintain more stable trends over time, indicating consistency in pricing strategies. Whereas Metro and T&T display more dynamic fluctuations in price change. SaveOnFoods has very sparse data. What we can takeaway from this is the notable difference in size of company between those with stable and unstable fluctuations. The vendors with stable trends over this time period are generally the larger corporations like Walmart, Sobeys (owns Voila) and Loblaws. Metro is a direct competitor with Loblaws and is clearly trying a different pricing strategy to maintain such competition. Large corporations are more immune to smaller issues, like supply chain issues, in short periods of time which shows in their lack of fluctuation in egg dozen prices. However smaller vendors may feel the effects much quicker and have to respond quicker in order to bolster sales. Hence we see more fluctuation in smaller period of time.
+
+Another takeaway from the results above is that T&T and SaveOnFoods, two vendors generally considered to be more of discount establishment, have the highest average price of a dozen of eggs. The lowest average price of a dozen eggs is from Voila (an online grocery vendor) and Walmart. This is not a surprising find that these large corporations are able to provide the cheapest option but it does show that discount vendors are not necessarily cheaper when you expect them to be for staple goods like eggs. 
+
+Lastly, if we look at the box plot we can get a nice overview of which vendors experience less price change. If we also take into account the number of products we are considering for each vendor it is clear that NoFrills, Voila, and Walmart have the most consistent prices. Although Loblaws shows little change in price over time, any change that does happen is larger compared to the previously mentioned vendors. Hence why on the table Loblaws has the second highest average change in price but in the line graph is seems completely stable. We can also see that Metro, a direct competitor to Loblaws, actually has a smaller average change in price than Loblaws. It is that there are many more smaller changes in price that makes Metro seems like it has a lot of fluctuation in price. The less common but large changes in price have a lot more effect on the average than the more often but smaller changes.
+
+In conclusion, I would shop at Walmart or the online vendor Voila if I wanted to be able to confidently predict my grocery bill cost. They not only have small average changes in price over time, but also offer the cheapest product on average.
+
+## Correlation Versus Causation
+While this paper explores trends in the price changes of a dozen eggs across various vendors, it is essential to recognize the limitations of inferring causation from these observed correlations. For example, vendors with smaller market shares, such as T&T or No Frills, exhibit more frequent price changes compared to larger retailers like Loblaws or Walmart. However, this observation does not necessarily mean that a smaller market share causes more volatile pricing.
+
+## Missing Data
+Missing data plays an important role in these findings because we cannot be certain all occurrences for a dozen eggs were considered in the data set I used. There could have been more occurrences with different values of prices that could have chnaged the outcome. Especially since only 15 occurrences were found for SaveOnFoods and 47 for Voila, any missing occurrences for SaveOnFoods could have a large effect on its results. 
+
+We also had to discard information that did end up in our dataset based off of our search conditions. Some data with NULL values were not useful for finding average prices or change in price and therefor had to be discarded. In the case that these data points had a numeric value for the old or current price, that is still valuable information to this paper but unusable.
+
+## Sources of Bias
+One of the most obvious sources of bias is that not all vendors are represented equally. Some vendors have many more data point for egg dozens then others so we can't get a full picture of what their pricing behavior is really like. Another source of bias is th elocation of these vendors. Based on their location they may undergo more or less hardships in areas like supply chain. They could also be closer or further from populated areas which would effect their prices. This source of biased is minimized since we are taking vendors that are close together so ideally they should all be experiencing these issues to a similar degree. 
+
+There is also the idea that some vendors would sell a different type of food. For example, Loblaws may be considered a little higher classed than Walmart, so therefore maybe the bae price of the eggs they choose to sell is higher in the first place. With that comes many other factors that could effect the price of eggs that is out of their control. 
+
+Lastly, there is a large bias on the results in this paper in that this only spans 6 months. It is hard to get a full picture of the pricing bahavior of a company only looking at one product over 6 months. 
+
+Ultimately, this paper lacks real ability to be able to determine any information about Canadian groceries with great confidence. Simply looking at one product over 6 months may not be sufficient to make actual conclusions. In future research, more staple goods should be considered with a priority and being able to track them over a longer period of time. 
+
 # References
